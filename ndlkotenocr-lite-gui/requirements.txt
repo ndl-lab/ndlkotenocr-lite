@@ -2,8 +2,7 @@ dill==0.3.8
 flet==0.24.1
 lxml==5.2.2
 networkx==3.3
-numpy==1.26.4
-onnxruntime==1.18.0
+onnxruntime==1.20.1
 pillow==11.0.0
 ordered-set==4.1.0
 protobuf==3.20.3
