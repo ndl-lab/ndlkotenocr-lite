@@ -61,7 +61,6 @@ jobs:
         run: |
           cd ndlkotenocr-lite-gui
           cp -r ../src .
-          cp  ../pyproject.toml .
           flet build ${{ matrix.target-platform }} --output ../${{ matrix.target-platform }} --build-version ${{github.ref_name}} 
       - name: "Flet build(Windows)"
         if: runner.os == 'Windows'
@@ -69,7 +68,6 @@ jobs:
         run: |
           cd ndlkotenocr-lite-gui
           echo D | xcopy ..\src .\src /E
-          echo D | xcopy ..\pyproject.toml .\ /E
           set PYTHONUTF8=1
           flet build ${{ matrix.target-platform }} --output ..\${{ matrix.target-platform }} --build-version ${{github.ref_name}}
       - name: "Linux/MacOS compress"
