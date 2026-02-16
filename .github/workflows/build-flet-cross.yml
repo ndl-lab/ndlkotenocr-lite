@@ -6,7 +6,7 @@ on:
     
 jobs:
   create-release:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - runs-on: ubuntu-24.04
+          - runs-on: ubuntu-22.04
             binary-name: ${{ vars.APP_NAME }}_v${{github.ref_name}}_linux.tar.gz
             target-platform: linux
           - runs-on: macos-latest
