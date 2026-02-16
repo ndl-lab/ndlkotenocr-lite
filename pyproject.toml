@@ -1,5 +1,5 @@
 [project]
-name = "ndlocr-lite-gui"
+name = "ndlkotenocr-lite-gui"
 version = "0.1.0"
 description = ""
 readme = "README.md"
@@ -32,7 +32,7 @@ org = "jp.go.ndl"
 
 # project display name that is used as an app title on Android and iOS home screens,
 # shown in window titles and about app dialogs on desktop.
-product = "ndlocr-lite-gui"
+product = "ndlkotenocr-lite-gui"
 
 # company name to display in about app dialogs
 company = "National Diet Library"
