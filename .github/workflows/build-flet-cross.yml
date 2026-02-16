@@ -45,7 +45,7 @@ jobs:
           python-version: '3.10' 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.5'
+          flutter-version: '3.27.4'
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
@@ -61,6 +61,7 @@ jobs:
         run: |
           cd ndlkotenocr-lite-gui
           cp -r ../src .
+          cp  ../pyproject.toml .
           flet build ${{ matrix.target-platform }} --output ../${{ matrix.target-platform }} --build-version ${{github.ref_name}} 
       - name: "Flet build(Windows)"
         if: runner.os == 'Windows'
@@ -68,6 +69,7 @@ jobs:
         run: |
           cd ndlkotenocr-lite-gui
           echo D | xcopy ..\src .\src /E
+          echo D | xcopy ..\pyproject.toml .\ /E
           set PYTHONUTF8=1
           flet build ${{ matrix.target-platform }} --output ..\${{ matrix.target-platform }} --build-version ${{github.ref_name}}
       - name: "Linux/MacOS compress"
