@@ -29,7 +29,7 @@ jobs:
           - runs-on: macos-latest
             binary-name: ${{ vars.APP_NAME }}_v${{github.ref_name}}_macos_apple_silicon.tar.gz
             target-platform: macos
-          - runs-on: macos-13
+          - runs-on: macos-15-intel
             binary-name: ${{ vars.APP_NAME }}_v${{github.ref_name}}_macos_intel.tar.gz
             target-platform: macos
           - runs-on: windows-latest
