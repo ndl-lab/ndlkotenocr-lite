@@ -1,4 +1,4 @@
-flet==0.27.5
+flet==0.27.6
 dill==0.3.8
 lxml==5.2.2
 networkx==3.3
