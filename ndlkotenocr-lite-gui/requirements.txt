@@ -5,8 +5,8 @@ networkx==3.3
 onnxruntime==1.23.2
 pillow==12.1.1
 ordered-set==4.1.0
-protobuf==3.20.3
-pyparsing==6.31.1
+protobuf==6.31.1
+pyparsing==3.1.2
 PyYAML==6.0.1
 tqdm==4.66.4
 reportlab==4.2.5
