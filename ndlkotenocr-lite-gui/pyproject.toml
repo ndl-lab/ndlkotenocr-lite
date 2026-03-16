@@ -3,27 +3,15 @@ name = "ndlkotenocr-lite-gui"
 version = "0.1.0"
 description = ""
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
     { name = "National Diet Library", email = "lab@ndl.go.jp" }
 ]
-dependencies = [
-  "flet==0.27.6",
-  "dill==0.3.8",
-  "lxml==5.2.2",
-  "networkx==3.3",
-  "onnxruntime==1.23.2",
-  "pillow==11.0.0",
-  "ordered-set==4.1.0",
-  "protobuf==3.20.3",
-  "pyparsing==3.1.2",
-  "PyYAML==6.0.1",
-  "tqdm==4.66.4",
-  "reportlab==4.2.5",
-  "pypdfium2==4.30.0",
-  "numpy==2.2.2",
-  "requests==2.32.3"
-]
+
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
 
 [tool.flet]
 # org name in reverse domain name notation, e.g. "com.mycompany".
