@@ -49,6 +49,7 @@ class PARSEQ:
         #resized = cv2.resize(image_rgb, (self.input_width, self.input_height),interpolation=cv2.INTER_CUBIC)
         pil_resized = pil_image.resize((self.input_width, self.input_height))
         resized = np.array(pil_resized)
+        resized = resized[:,:,::-1]
         input_image = resized / 255.0
         input_image = 2.0*(input_image-0.5)
         input_image = input_image.transpose(2,0,1)

@@ -29,7 +29,7 @@ jobs:
           - runs-on: macos-latest
             binary-name: ${{ vars.APP_NAME }}_v${{github.ref_name}}_macos_apple_silicon.tar.gz
             target-platform: macos
-          - runs-on: macos-13
+          - runs-on: macos-15-intel
             binary-name: ${{ vars.APP_NAME }}_v${{github.ref_name}}_macos_intel.tar.gz
             target-platform: macos
           - runs-on: windows-latest
@@ -42,10 +42,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.10' 
+          python-version: '3.12' 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.5'
+          flutter-version: '3.27.4'
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
@@ -61,7 +61,13 @@ jobs:
         run: |
           cd ndlkotenocr-lite-gui
           cp -r ../src .
-          flet build ${{ matrix.target-platform }} --output ../${{ matrix.target-platform }} --build-version ${{github.ref_name}} --project "NDLkotenOCR-Lite" --product "NDLkotenOCR-Lite" --org "National_Diet_Library" --company "National_Diet_Library" --copyright "Copyright_(c)_2024_National_Diet_Library"
+          EXTRA_ARGS=""
+          # Intel Macの場合のみ引数を追加する処理
+          if [ "${{ matrix.runs-on }}" = "macos-15-intel" ]; then
+            echo "Intel Mac detected: Configuring specific settings..."
+            EXTRA_ARGS="--arch x86_64"
+          fi
+          flet build ${{ matrix.target-platform }} --output ../${{ matrix.target-platform }} --build-version ${{github.ref_name}} $EXTRA_ARGS
       - name: "Flet build(Windows)"
         if: runner.os == 'Windows'
         shell: cmd
@@ -69,7 +75,8 @@ jobs:
           cd ndlkotenocr-lite-gui
           echo D | xcopy ..\src .\src /E
           set PYTHONUTF8=1
-          flet build ${{ matrix.target-platform }} --output ..\${{ matrix.target-platform }} --build-version ${{github.ref_name}} --project "NDLkotenOCR-Lite" --product "NDLkotenOCR-Lite" --org "National_Diet_Library" --company "National_Diet_Library" --copyright "Copyright_(c)_2024_National_Diet_Library"
+          flet build ${{ matrix.target-platform }} --output ..\${{ matrix.target-platform }} --build-version ${{github.ref_name}}
+          copy main.py ..\${{ matrix.target-platform }}
       - name: "Linux/MacOS compress"
         if: runner.os != 'Windows'
         run: tar zcvf ${{matrix.binary-name}} ${{ matrix.target-platform }}

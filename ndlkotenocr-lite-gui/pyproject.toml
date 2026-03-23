@@ -1,0 +1,47 @@
+[project]
+name = "ndlkotenocr-lite-gui"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "National Diet Library", email = "lab@ndl.go.jp" }
+]
+
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.flet]
+# org name in reverse domain name notation, e.g. "com.mycompany".
+# Combined with project.name to build bundle ID for iOS and Android apps
+org = "jp.go.ndl"
+
+# project display name that is used as an app title on Android and iOS home screens,
+# shown in window titles and about app dialogs on desktop.
+product = "ndlkotenocr-lite-gui"
+
+# company name to display in about app dialogs
+company = "National Diet Library"
+
+# copyright text to display in about app dialogs
+copyright = "Copyright (C) 2025 by National Diet Library"
+
+[tool.flet.app]
+path = "."
+
+[tool.uv]
+dev-dependencies = [
+    "flet[all]==0.27.6",
+]
+
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.group.dev.dependencies]
+flet = {extras = ["all"], version = "0.27.6"}
+
+[tool.flet.flutter.pubspec.dependency_overrides]
+webview_flutter_android = "3.16.9"
+serious_python="0.9.6"
