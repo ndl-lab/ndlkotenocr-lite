@@ -19,7 +19,12 @@ from ndl_parser import convert_to_xml_string3
 from reading_order.xy_cut.eval import eval_xml
 from tools.ndlkoten2tei import convert_tei
 
+_DETECTOR_CACHE = {}
 def get_detector(args):
+    _det_key = (args.det_weights, args.det_classes, args.det_score_threshold,
+                args.det_conf_threshold, args.det_iou_threshold, args.device)
+    if _det_key in _DETECTOR_CACHE:
+        return _DETECTOR_CACHE[_det_key]
     weights_path = args.det_weights
     classes_path = args.det_classes
     assert os.path.isfile(weights_path), f"There's no weight file with name {weights_path}"
@@ -30,6 +35,7 @@ def get_detector(args):
                       conf_thresold=args.det_conf_threshold,
                       iou_threshold=args.det_iou_threshold,
                       device=args.device)
+    _DETECTOR_CACHE[_det_key] = detector
     return detector
 def get_recognizer(args):
     weights_path = args.rec_weights
