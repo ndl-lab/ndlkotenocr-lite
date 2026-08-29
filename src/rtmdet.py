@@ -4,6 +4,7 @@ import yaml
 import onnxruntime
 import numpy as np
 from typing import Tuple, List
+from onnxruntime_utils import create_inference_session, normalize_device
 
 class RTMDet:
     def __init__(self,
@@ -17,7 +18,7 @@ class RTMDet:
         self.model_path = model_path
         self.class_mapping_path = class_mapping_path
         self.image_width, self.image_height = original_size
-        self.device = device
+        self.device = normalize_device(device)
         self.score_threshold = score_threshold
         self.conf_thresold = conf_thresold
         self.iou_threshold = iou_threshold
@@ -26,10 +27,11 @@ class RTMDet:
     def create_session(self) -> None:
         opt_session = onnxruntime.SessionOptions()
         opt_session.graph_optimization_level = onnxruntime.GraphOptimizationLevel.ORT_DISABLE_ALL
-        providers = ['CPUExecutionProvider']
-        if self.device.casefold() != "cpu":
-            providers.append("CUDAExecutionProvider")
-        session = onnxruntime.InferenceSession(self.model_path, providers=providers)
+        session = create_inference_session(
+            self.model_path,
+            device=self.device,
+            session_options=opt_session,
+        )
         self.session = session
         self.model_inputs = self.session.get_inputs()
         self.input_names = [self.model_inputs[i].name for i in range(len(self.model_inputs))]

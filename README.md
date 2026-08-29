@@ -72,7 +72,32 @@ OCR結果を保存する出力先ディレクトリを相対パスまたは絶�
 `--viz True`を指定することで、文字認識箇所を青枠で表示した画像を出力先ディレクトリに出力する。
 
 #### `--device`オプション（ベータ）
-対応GPUを搭載したサーバかつonnxruntime-gpuがインストールされている環境に限り、`--device cuda`を指定することでGPUを利用した処理に切り替える。
+CPUがデフォルトです。対応GPUを搭載した環境では、CUDA版のONNX Runtimeをインストールしたうえで`--device cuda`を指定できます。WindowsでDirectMLを利用する場合は、DirectML版のONNX Runtimeをインストールし、`--device dml`（`--device directml`も可）を指定してください。デバイス名は大文字・小文字を区別しません。
+
+指定したアクセラレータが現在のONNX Runtimeで利用できない場合は、OCRをCPUに黙って切り替えず、利用可能なproviderを示すエラーで停止します。これにより、CPUで実行された処理をGPU実行と取り違えません。アクセラレータセッションで個別の演算子がCPUにフォールバックすることはあります。
+
+DirectMLを指定した場合は、互換性のためSessionOptionsのメモリパターンを無効化し、逐次実行（`ORT_SEQUENTIAL`）を使用します。この設定はCPUおよびCUDAの実行には適用されません。
+
+### Optional ONNX Runtime provider installation
+
+The baseline `requirements.txt` intentionally installs the CPU package `onnxruntime`, so CPU-only environments remain supported. For an accelerator environment, use a fresh virtual environment or remove the CPU package **before** installing exactly one provider package:
+
+```text
+python -m pip uninstall -y onnxruntime
+# Choose exactly one of the following:
+python -m pip install onnxruntime-gpu       # CUDA
+# python -m pip install onnxruntime-directml  # DirectML on Windows
+```
+
+Do not install these provider packages together (`onnxruntime`, `onnxruntime-gpu`, and `onnxruntime-directml`). Choose one package that matches the hardware and operating system, then verify it before running OCR:
+
+```text
+python -c "import onnxruntime as ort; print(ort.get_available_providers())"
+```
+
+The application checks this provider list at startup. A missing CUDA or DirectML provider is reported explicitly; it is not silently treated as a successful GPU run.
+
+The desktop GUI accepts the same `--device` option when started from a terminal (for example, `main.py --device directml`).
 
 
 ## OCR結果の例

@@ -18,6 +18,7 @@ from reading_order.xy_cut.eval import eval_xml
 from ndl_parser import convert_to_xml_string3
 from reading_order.xy_cut.eval import eval_xml
 from tools.ndlkoten2tei import convert_tei
+from onnxruntime_utils import add_device_argument
 
 _DETECTOR_CACHE = {}
 def get_detector(args):
@@ -182,9 +183,9 @@ def process(args):
         wf.write(allxmlstrtei)
 
 
-if __name__=="__main__":
+def build_arg_parser():
     import argparse
-    
+
     parser = argparse.ArgumentParser(description="Arguments for NDLkotenOCR-Lite")
 
     parser.add_argument("--sourcedir", type=str, required=False, help="Path to image directory")
@@ -198,8 +199,12 @@ if __name__=="__main__":
     parser.add_argument("--det-iou-threshold", type=float, required=False, default=0.3)
     parser.add_argument("--rec-weights", type=str, required=False, help="Path to parseq-tiny onnx file", default="model/parseq-ndl-32x384-tiny-10.onnx")
     parser.add_argument("--rec-classes", type=str, required=False, help="Path to list of class in yaml file", default="config/NDLmoji.yaml")
-    parser.add_argument("--device", type=str, required=False, help="Device use (cpu or cuda)", choices=["cpu", "cuda"], default="cpu")
-    args = parser.parse_args()
+    add_device_argument(parser)
+    return parser
+
+
+if __name__=="__main__":
+    args = build_arg_parser().parse_args()
     process(args)
     
 

@@ -903,7 +903,7 @@ class CaptureTool:
             yaml.dump(self.config_obj, wf, default_flow_style=False, allow_unicode=True)
 
 
-def main(page: ft.Page):
+def build_arg_parser():
     # デフォルトの重みファイルパスを設定（環境に合わせて調整）
     default_det_weights = "./src/model/rtmdet-s-1280x1280.onnx"
     default_rec_weights = "./src/model/parseq-ndl-32x384-tiny-10.onnx"
@@ -922,7 +922,12 @@ def main(page: ft.Page):
     parser.add_argument("--rec-weights", type=str, required=False, help="Path to parseq-tiny onnx file", default=default_rec_weights)
     
     parser.add_argument("--rec-classes", type=str, required=False, help="Path to list of class in yaml file", default="./src/config/NDLmoji.yaml")
-    parser.add_argument("--device", type=str, required=False, help="Device use (cpu or cuda)", choices=["cpu", "cuda"], default="cpu")
+    ocr.add_device_argument(parser)
+    return parser
+
+
+def main(page: ft.Page):
+    parser = build_arg_parser()
     args = parser.parse_args()
     
     page.title = "NDLkotenOCR-Lite-GUI"
