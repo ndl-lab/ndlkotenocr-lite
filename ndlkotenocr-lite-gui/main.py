@@ -5,7 +5,7 @@ from typing import List, Dict, Tuple
 import sys
 import os
 import numpy as np
-from PIL import Image, ImageGrab
+from PIL import Image, ImageGrab, ImageOps
 from pathlib import Path
 sys.path.append(os.path.join(".","src"))
 import ocr
@@ -420,8 +420,10 @@ class ImageSelector:
         self.page.update()
 
     def crop_region(self, e):
-        pilimg=Image.open(self.img.src)
-        pilimg=pilimg.convert('RGB')
+        #pilimg=Image.open(self.img.src)
+        #pilimg=pilimg.convert('RGB')
+        with Image.open(self.img.src) as source:
+            pilimg = ImageOps.exif_transpose(source).convert('RGB')
         rwidth,rheight=pilimg.size
         if rheight<rwidth:
             window_h=self.dialog_height*rheight/rwidth
@@ -1062,7 +1064,9 @@ def main(page: ft.Page):
                 for idx,inputpath in enumerate(inputpathlist):
                     progressmessage.value=inputpath
                     progressmessage.update()
-                    pil_image = Image.open(inputpath).convert('RGB')
+                    #pil_image = Image.open(inputpath).convert('RGB')
+                    with Image.open(inputpath) as source:
+                        pil_image = ImageOps.exif_transpose(source).convert('RGB')
                     npimg = np.array(pil_image)
                     start = time.time()
                     inputdivlist=[]

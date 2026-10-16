@@ -2,7 +2,7 @@ import sys
 sys.setrecursionlimit(5000)
 import os
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from rtmdet import RTMDet
@@ -95,7 +95,9 @@ def process(args):
     alljsonobjlist=[]
     for inputpath in inputpathlist:
         ext=inputpath.split(".")[-1]
-        pil_image = Image.open(inputpath).convert('RGB')
+        #pil_image = Image.open(inputpath).convert('RGB')
+        with Image.open(inputpath) as source:
+            pil_image = ImageOps.exif_transpose(source).convert('RGB')
         npimg = np.array(pil_image)
         start = time.time()
         inputdivlist=[]
